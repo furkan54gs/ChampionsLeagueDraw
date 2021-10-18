@@ -72,7 +72,7 @@ namespace ChampionsLeagueDraw
                         {
                             if ((selectedGroupList[i].Scored - selectedGroupList[i].UnScored) == (selectedGroupList[i + 1].Scored - selectedGroupList[i + 1].UnScored))
                             {
-                                bool coin = Convert.ToBoolean(_rand.Next(0, 1));
+                                bool coin = Convert.ToBoolean(_rand.Next(0, 2));
                                 if (coin)
                                     eliminatedTeams.Add(p, selectedGroupList.Take(2).ToList());
                                 else
