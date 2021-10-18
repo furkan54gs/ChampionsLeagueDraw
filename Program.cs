@@ -80,7 +80,7 @@ namespace ChampionsLeagueDraw
                             }
                             else
                             {
-                                eliminatedTeams.Add(p, selectedGroupList.Take(2).OrderByDescending(x => x.Scored - x.UnScored).ToList());
+                                eliminatedTeams.Add(p, selectedGroupList.Take(2).OrderByDescending(x => x.Scored).ThenByDescending(x => x.Scored - x.UnScored).ToList());
                                 break;
                             }
                         }
@@ -100,7 +100,7 @@ namespace ChampionsLeagueDraw
             return (eliminatedTeams);
         }
 
-        public static SortedList<int, List<Team>> OrderTeamGroups(SortedList<int, List<Team>> groups) //takımlardaki takımları sıralar
+        public static SortedList<int, List<Team>> OrderTeamGroups(SortedList<int, List<Team>> groups) //gruptaki takımları sıralar
         {
             SortedList<int, List<Team>> orderedTeams = new SortedList<int, List<Team>>();
 
