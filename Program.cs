@@ -8,13 +8,13 @@ namespace ChampionsLeagueDraw
 {
     class Program
     {
-        public static readonly int _bagNumber = 4;
-        public static readonly int _bagCapacity = 8;
-        public static readonly int _groupNumber = 8;
-        public static readonly int _groupCapacity = 4;
-        public static readonly int _maxGoal = 9;
-        private static readonly Random _rand = new Random();
-        private static readonly string[,] _teamAndNation = new string[32, 2] { { "Bayern Munich", "Almanya" }, { "FK Buducnost Podgorica", "Karadağ" }, { "Real Madrid", "İspanya" }, { "BSC Young Boys", "İsviçre" }, { "Juventus", "İtalya" }, { "Paris Saint-Germain", "Fransa" }, { "Zenit", "Rusya" }, { "Porto", "Portekiz" }, { "Barcelona", "İspanya" }, { "Atlético Madrid", "İspanya" }, { "AZ Alkmaar", "Hollanda" }, { "Manchester United", "İngiltere" }, { "Borussia Dortmund", "Almanya" }, { "Shakhtar Donetsk", "Ukrayna" }, { "Chelsea", "İngiltere" }, { "Ajax", "Hollanda" }, { "Dynamo Kiev", "Ukrayna" }, { "Red Bull Salzburg", "Avusturya" }, { "NK Celje", "Slovenya" }, { "FK Astana", "Kazakistan" }, { "Olympiacos", "Yunanistan" }, { "Lazio", "İtalya" }, { "Krasnodar", "Rusya" }, { "Atalanta", "İtalya" }, { "Lokomotiv Moskova", "Rusya" }, { "Marseille", "Fransa" }, { "Club Brugge", "Belçika" }, { "Bor. Mönchengladbach", "Almanya" }, { "Galatasaray", "Türkiye" }, { "Midtjylland", "Danimarka" }, { "Rennes", "Fransa" }, { "Ferencváros", "Macaristan" } };
+        static readonly int bagNumber = 4;
+        static readonly int bagCapacity = 8;
+        static readonly int groupNumber = 8;
+        static readonly int groupCapacity = 4;
+        static readonly int maxGoal = 9;
+        static readonly Random rand = new Random();
+        static readonly string[,] teamAndNation = new string[32, 2] { { "Bayern Munich", "Almanya" }, { "FK Buducnost Podgorica", "Karadağ" }, { "Real Madrid", "İspanya" }, { "BSC Young Boys", "İsviçre" }, { "Juventus", "İtalya" }, { "Paris Saint-Germain", "Fransa" }, { "Zenit", "Rusya" }, { "Porto", "Portekiz" }, { "Barcelona", "İspanya" }, { "FK Senica", "Slovakya" }, { "AZ Alkmaar", "Hollanda" }, { "Manchester United", "İngiltere" }, { "Borussia Dortmund", "Almanya" }, { "Shakhtar Donetsk", "Ukrayna" }, { "Chelsea", "İngiltere" }, { "Ajax", "Hollanda" }, { "Dynamo Kiev", "Ukrayna" }, { "Red Bull Salzburg", "Avusturya" }, { "NK Celje", "Slovenya" }, { "FK Astana", "Kazakistan" }, { "Olympiacos", "Yunanistan" }, { "Lazio", "İtalya" }, { "Krasnodar", "Rusya" }, { "Ferençvaroş", "Macaristan" }, { "Lokomotiv Moskova", "Rusya" }, { "Marseille", "Fransa" }, { "Club Brugge", "Belçika" }, { "FK Partizan", "Sırbistan" }, { "Galatasaray", "Türkiye" }, { "Midtjylland", "Danimarka" }, { "Rennes", "Fransa" }, { "Ferencváros", "Macaristan" } };
 
         static void Main(string[] args) //...
         {
@@ -22,7 +22,7 @@ namespace ChampionsLeagueDraw
             watch.Start();
 
             List<Team> teams = new List<Team>();
-            teams = CreateTeamList(_teamAndNation);
+            teams = CreateTeamList(teamAndNation);
 
             SortedList<int, List<Team>> bag = new SortedList<int, List<Team>>(CreateBag(teams));
             PrintTeams(bag, "Torbalar");
@@ -60,11 +60,11 @@ namespace ChampionsLeagueDraw
         {
             SortedList<int, List<Team>> eliminatedTeams = new SortedList<int, List<Team>>();
             List<Team> selectedGroupList = new List<Team>();
-            for (int p = 0; p < _groupNumber; p++)
+            for (int p = 0; p < groupNumber; p++)
             {
                 selectedGroupList = groups[p];
 
-                for (int i = 0; i < _groupCapacity; i++)
+                for (int i = 0; i < groupCapacity; i++)
                 {
                     if (selectedGroupList[i].Point == selectedGroupList[i + 1].Point)
                     {
@@ -72,7 +72,7 @@ namespace ChampionsLeagueDraw
                         {
                             if ((selectedGroupList[i].Scored - selectedGroupList[i].UnScored) == (selectedGroupList[i + 1].Scored - selectedGroupList[i + 1].UnScored))
                             {
-                                bool coin = Convert.ToBoolean(_rand.Next(0, 2));
+                                bool coin = Convert.ToBoolean(rand.Next(0, 2));
                                 if (coin)
                                     eliminatedTeams.Add(p, selectedGroupList.Take(2).ToList());
                                 else
@@ -115,42 +115,39 @@ namespace ChampionsLeagueDraw
         {
             int homeGaol = 0;
             int awayGoal = 0;
-            Team homeTeam = new Team();
-            Team awayTeam = new Team();
 
-            for (int p = 0; p < _groupNumber; p++)
+            for (int p = 0; p < groupNumber; p++)
             {
-                for (int i = 0; i < _groupCapacity; i++)
+                for (int i = 0; i < groupCapacity; i++)
                 {
-                    homeTeam = groups[p][i];
-                    for (int z = 0; z < _groupCapacity; z++)
+                    for (int z = 0; z < groupCapacity; z++)
                     {
                         if (z != i)
                         {
-                            awayTeam = groups[p][z];
-                            awayGoal = _rand.Next(0, _maxGoal);
-                            awayTeam.Scored += awayGoal;
-                            homeTeam.UnScored += awayGoal;
-                            homeGaol = _rand.Next(0, _maxGoal);
-                            homeTeam.Scored += homeGaol;
-                            awayTeam.UnScored += homeGaol;
+                            awayGoal = rand.Next(0, maxGoal);
+                            groups[p][z].Scored += awayGoal;
+                            groups[p][i].UnScored += awayGoal;
+
+                            homeGaol = rand.Next(0, maxGoal);
+                            groups[p][i].Scored += homeGaol;
+                            groups[p][z].UnScored += homeGaol;
 
                             if (homeGaol > awayGoal)
                             {
-                                homeTeam.Point += 3;
-                                Console.WriteLine("Ev sahibi {0}, {1} ile oynadığı maçı {2} - {3} kazandı. ", homeTeam.TeamName, awayTeam.TeamName, homeGaol, awayGoal);
+                                groups[p][i].Point += 3;
+                                Console.WriteLine("Ev sahibi {0}, {1} ile oynadığı maçı {2} - {3} kazandı. ", groups[p][i].TeamName, groups[p][z].TeamName, homeGaol, awayGoal);
                             }
                             else if (awayGoal > homeGaol)
                             {
-                                awayTeam.Point += 3;
-                                Console.WriteLine("Ev sahibi {0}, {1} ile oynadığı maçı {2} - {3} kaybetti. ", homeTeam.TeamName, awayTeam.TeamName, homeGaol, awayGoal);
+                                groups[p][z].Point += 3;
+                                Console.WriteLine("Ev sahibi {0}, {1} ile oynadığı maçı {2} - {3} kaybetti. ", groups[p][i].TeamName, groups[p][z].TeamName, homeGaol, awayGoal);
 
                             }
                             else
                             {
-                                homeTeam.Point += 1;
-                                awayTeam.Point += 1;
-                                Console.WriteLine("Ev sahibi {0}, {1} ile oynadığı maçta {2} - {3} berabere kaldı. ", homeTeam.TeamName, awayTeam.TeamName, homeGaol, awayGoal);
+                                groups[p][i].Point += 1;
+                                groups[p][z].Point += 1;
+                                Console.WriteLine("Ev sahibi {0}, {1} ile oynadığı maçta {2} - {3} berabere kaldı. ", groups[p][i].TeamName, groups[p][z].TeamName, homeGaol, awayGoal);
                             }
                         }
                     }
@@ -161,9 +158,9 @@ namespace ChampionsLeagueDraw
         public static SortedList<int, List<Team>> CreateBag(List<Team> teams) // torba oluştur
         {
             SortedList<int, List<Team>> bag = new SortedList<int, List<Team>>();
-            for (int i = 0; i < _bagNumber; i++)
+            for (int i = 0; i < bagNumber; i++)
             {
-                bag.Add(i, teams.GetRange((i * _bagCapacity), _bagCapacity));
+                bag.Add(i, teams.GetRange((i * bagCapacity), bagCapacity));
             }
             return (bag);
 
@@ -177,15 +174,15 @@ namespace ChampionsLeagueDraw
             int randomTeamSet = 0; // takımın atılacağı grubun indexi
             bool inHand = false;
 
-            for (int p = 0; p < _groupCapacity; p++)
+            for (int p = 0; p < groupCapacity; p++)
             {
-                for (int i = 0; i < _groupNumber; i++)
+                for (int i = 0; i < groupNumber; i++)
                 {
-                    randomTeamSet = _rand.Next(0, _groupNumber);
+                    randomTeamSet = rand.Next(0, groupNumber);
 
                     if (!inHand)
                     {
-                        randomTeamGet = _rand.Next(0, _groupNumber - i);
+                        randomTeamGet = rand.Next(0, groupNumber - i);
                         selectedTeam = bag[p][randomTeamGet];
                         bag[p].Remove(selectedTeam);
                     }
