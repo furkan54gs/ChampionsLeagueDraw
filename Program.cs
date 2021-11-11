@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 
 namespace ChampionsLeagueDraw
@@ -35,7 +34,7 @@ namespace ChampionsLeagueDraw
             SortedList<int, List<Team>> fixture = new SortedList<int, List<Team>>(OrderTeamGroups(groups));
             PrintTeams(fixture, "Fikstür");
 
-            SortedList<int, List<Team>> elimination = new SortedList<int, List<Team>>(EliminationTeams(fixture));
+            SortedList<int, List<Team>> elimination = new SortedList<int, List<Team>>(EliminateTeams(fixture));
             PrintTeams(elimination, "Üst tur takımları");
 
             watch.Stop();
@@ -43,7 +42,7 @@ namespace ChampionsLeagueDraw
         }
 
 
-        private static void PrintTeams(SortedList<int, List<Team>> teams, string message) // takımları yazdırır
+        static void PrintTeams(SortedList<int, List<Team>> teams, string message) // Takımları yazdırma
         {
             for (int i = 0; i < teams.Keys.Count; i++)
             {
@@ -56,7 +55,7 @@ namespace ChampionsLeagueDraw
             Console.WriteLine("\n");
         }
 
-        public static SortedList<int, List<Team>> EliminationTeams(SortedList<int, List<Team>> groups) //gruplardaki takımların eleme işlemi
+        static SortedList<int, List<Team>> EliminateTeams(SortedList<int, List<Team>> groups) // Gruplardaki takımların eleme işlemi
         {
             SortedList<int, List<Team>> eliminatedTeams = new SortedList<int, List<Team>>();
             List<Team> selectedGroupList = new List<Team>();
@@ -100,7 +99,7 @@ namespace ChampionsLeagueDraw
             return (eliminatedTeams);
         }
 
-        public static SortedList<int, List<Team>> OrderTeamGroups(SortedList<int, List<Team>> groups) //gruptaki takımları sıralar
+        static SortedList<int, List<Team>> OrderTeamGroups(SortedList<int, List<Team>> groups) // Gruptaki takımları sıralama
         {
             SortedList<int, List<Team>> orderedTeams = new SortedList<int, List<Team>>();
 
@@ -111,7 +110,7 @@ namespace ChampionsLeagueDraw
             return (orderedTeams);
         }
 
-        public static void Match(SortedList<int, List<Team>> groups) //Maçları yap
+        static void Match(SortedList<int, List<Team>> groups) // Takımlar arası maç
         {
             int homeGaol = 0;
             int awayGoal = 0;
@@ -155,7 +154,7 @@ namespace ChampionsLeagueDraw
             }
         }
 
-        public static SortedList<int, List<Team>> CreateBag(List<Team> teams) // torba oluştur
+        static SortedList<int, List<Team>> CreateBag(List<Team> teams) // Torba oluşturma
         {
             SortedList<int, List<Team>> bag = new SortedList<int, List<Team>>();
             for (int i = 0; i < bagNumber; i++)
@@ -166,7 +165,7 @@ namespace ChampionsLeagueDraw
 
         }
 
-        public static SortedList<int, List<Team>> CreateRandomGroups(SortedList<int, List<Team>> bag) // torbadan random gruplarını seç ve ata
+        static SortedList<int, List<Team>> CreateRandomGroups(SortedList<int, List<Team>> bag) // Torbadan random takım seçilip, random gruplara atılması
         {
             SortedList<int, List<Team>> groups = new SortedList<int, List<Team>>();
             Team selectedTeam = new Team();
@@ -220,7 +219,7 @@ namespace ChampionsLeagueDraw
 
         }
 
-        private static Team CreateTeam(string _teamName, string _nationName) //takım oluştur
+        static Team CreateTeam(string _teamName, string _nationName) // Takım oluşturma
         {
             Team team = new Team()
             {
@@ -230,7 +229,7 @@ namespace ChampionsLeagueDraw
             return (team);
         }
 
-        private static List<Team> CreateTeamList(string[,] teamAndNation) //takım listesi oluştur
+        static List<Team> CreateTeamList(string[,] teamAndNation) // Takım listesi oluşturma
         {
             List<Team> fillTeams = new List<Team>();
             for (int i = 0; i < (teamAndNation.Length / 2); i++)
